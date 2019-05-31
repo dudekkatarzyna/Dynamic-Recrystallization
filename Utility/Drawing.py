@@ -110,6 +110,16 @@ class Drawing:
 
         return
 
+    def draw_dislocations(self):
+
+
+        for i in range(self.mesh_height):
+            for j in range(self.mesh_width):
+                print("drawing ",i,j)
+                if self.surface[i][j].crystalised:
+                    print("crystalized")
+                    self.draw_point(i, j, "FFFFFF")
+
     def draw_all_points(self):
         for i in range(self.mesh_height):
             for j in range(self.mesh_width):

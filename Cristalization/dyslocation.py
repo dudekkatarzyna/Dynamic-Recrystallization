@@ -1,14 +1,17 @@
 import copy
-from cmath import exp
+from math import exp
 from random import random, choices, randint
 
+from Smoothing.algorithm import  calculate_energy
 
-def calculate_delta_ro(previous_ro, time_step):
+
+def ro(time_step):
     A = 86710969050178.5
     B = 9.41268203527779
 
-    new_ro = A / B + (1 - A / B) * exp(-B * time_step)
-    return new_ro - previous_ro
+    new_ro = (A / B) + (1 - (A / B)) * exp(-B * time_step)
+    print(time_step, new_ro)
+    return new_ro
 
 
 def distribute_dislocations(surface, delta_ro, mesh_width, mesh_height, time):
@@ -18,13 +21,15 @@ def distribute_dislocations(surface, delta_ro, mesh_width, mesh_height, time):
     for i in range(mesh_height):
         for j in range(mesh_width):
 
+            calculate_energy(surface, surface[i][j], mesh_height, mesh_width, False, 'von Neumann', None, None)
+
             if surface[i][j].crystalised:
                 continue
 
             surface[i][j].dislocation += 0.7 * per_embryo
             rest += per_embryo - 0.7 * per_embryo
 
-            check_crystalisation(surface[i][j], time)
+            check_crystalisation(surface[i][j], mesh_height, mesh_width, time)
 
     distribute_rest_of_disloations(surface, rest, mesh_width, mesh_height, time)
     pass
@@ -48,26 +53,28 @@ def distribute_rest_of_disloations(surface, ro_to_distribute, mesh_width, mesh_h
             if choices([True, False], [0.2, 0.8]):
                 surface[i][j].dislocation += losowa_paczka
 
-        check_crystalisation(surface[i][j], time)
+        check_crystalisation(surface[i][j], mesh_height, mesh_width, time)
 
 
-def check_crystalisation(embryo, time):
-
-    if embryo.dislocation > 0 and embryo.energy != 0:
+def check_crystalisation(embryo, mesh_height, mesh_width, time):
+    print(embryo.dislocation.real - 4215840142323.42 / (mesh_height * mesh_width))
+    print(embryo.energy)
+    if embryo.dislocation.real > (4215840142323.42 / (mesh_height * mesh_width)) and embryo.energy != 0:
+        print("crystalized True")
         embryo.crystalised = True
         embryo.crystalised_in_step = time
         embryo.dislocation = 0
 
 
-
 def algorithm(surface, mesh_width, mesh_height):
     previous_ro = 0
-    for t in range(0, 7000):
+
+    for t in range(0, 200):
 
         time = t / 1000
-        delta_ro = calculate_delta_ro(previous_ro, time)
+        new_ro = ro(time)
 
-        distribute_dislocations(surface, delta_ro, mesh_width, mesh_height)
+        distribute_dislocations(surface, new_ro-previous_ro, mesh_width, mesh_height, time)
 
         for i in range(mesh_height):
             for j in range(mesh_width):
@@ -83,13 +90,14 @@ def algorithm(surface, mesh_width, mesh_height):
                         if k == l or k == -l:
                             continue
 
-                        if surface[k][l].crystalised == True and surface[k][l].crystalised_in_time == time - 0.001:
+                        if surface[k][l].crystalised == True and surface[k][l].crystalised_in_step == time - 0.001:
                             nbr = True
 
-                        if surface[k][l].dislocation < surface[i][j].dislocation:
+                        if surface[k][l].dislocation.real < surface[i][j].dislocation.real:
                             lower = True
                         else:
                             lower = False
 
                 if nbr and lower:
                     surface[i][j].crystalised = True
+        previous_ro = new_ro

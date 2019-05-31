@@ -10,6 +10,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.widget import Widget
 
+from Cristalization import dyslocation
 from Expansion.Radius import Radius
 from Expansion.User import User
 from Smoothing import algorithm
@@ -378,10 +379,22 @@ class NewClass(FloatLayout):
         if self.animation is not None:
             self.remove_widget(self.animation)
 
-            self.wygladzanie = Button(text='Wygładzanie ziaren', size_hint=(.15, .09),
+            self.wygladzanie = ToggleButton(text='Wygładzanie ziaren', size_hint=(.15, .09),
                                       background_color=(0, 1, 0, 1), pos_hint={'x': 0.18, 'y': .1})
             self.wygladzanie.bind(on_press=self.wygladzanie_ziaren)
             self.add_widget(self.wygladzanie)
+
+            self.animation = ToggleButton(text='Gęstość dyslokacji', size_hint=(.15, .09),
+                                    background_color=(0, 1, 0, 1), pos_hint={'x': 0.35, 'y': .1})
+            self.animation.bind(on_press=self.dyslokacje)
+            self.add_widget(self.animation)
+
+    def dyslokacje(self, *args):
+        dyslocation.algorithm(self.drawing.surface, self.mesh_width, self.mesh_height)
+
+        print("back in main")
+        self.drawing.draw_dislocations()
+        print("aaaaand back")
 
     def wygladzanie_ziaren(self, *args):
         self.clear_widgets()
