@@ -13,3 +13,6 @@ class Embryo:
         self.drawn = False
         self.energy = 0
         self.nbr_ids = set([])
+        self.dislocation = 0
+        self.crystalised = False
+        self.crystalised_in_step=0
