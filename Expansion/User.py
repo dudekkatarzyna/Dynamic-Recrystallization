@@ -23,7 +23,7 @@ class User:
 
         if 0.4 * Window.width + stepWidth * mesh_width >= touch.x >= 0.4 * Window.width and 0.9 * Window.height >= touch.y >= 0.9 * Window.height - (
                 stepHeight * mesh_width):
-            Colors.colors[len(Colors.colors)] = '%06X' % randint(0, 0xFFFFFF)
+            Colors.colors[len(Colors.colors)] = '%06X' % randint(0, 0x0000FF)
             print(touch.x, touch.y)
             embryos.append(
                 Embryo(int(mesh_width - int(

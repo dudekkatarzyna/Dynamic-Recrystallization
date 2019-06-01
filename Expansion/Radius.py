@@ -39,7 +39,7 @@ class Radius:
                         newclass.print_no_embryos(len(embryos))
                         return
 
-            Colors.colors[i + 1] = '%06X' % randint(0, 0xFFFFFF)
+            Colors.colors[i + 1] = '%06X' % randint(0, 0x0000FF)
             embryos.append(Embryo(x, y, i + 1, Colors.colors[i + 1]))
             Radius.x_list.append(x)
             Radius.y_list.append(y)

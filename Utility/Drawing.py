@@ -8,6 +8,7 @@ from kivy.graphics.vertex_instructions import Rectangle, Line
 from Neighbourhoods.Hex import Hex
 from Neighbourhoods.Pentagonal import Pentagonal
 from Neighbourhoods.WithRadius import WithRadius
+from Utility import Colors
 from Utility.Embryo import Embryo
 from Neighbourhoods.Moore import Moore
 from Neighbourhoods.vonNeuman import vonNeuman
@@ -112,13 +113,17 @@ class Drawing:
 
     def draw_dislocations(self):
 
-
+        count=0
         for i in range(self.mesh_height):
             for j in range(self.mesh_width):
-                print("drawing ",i,j)
                 if self.surface[i][j].crystalised:
                     print("crystalized")
-                    self.draw_point(i, j, "FFFFFF")
+                    count+=1
+                    self.draw_point(i, j, self.surface[i][j].color)
+        print("ilosc",count)
+
+
+
 
     def draw_all_points(self):
         for i in range(self.mesh_height):

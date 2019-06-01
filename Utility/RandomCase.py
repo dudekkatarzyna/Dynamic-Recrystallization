@@ -23,7 +23,7 @@ class RandomCase:
                 x = randint(0, mesh_height - 1)
                 y = randint(0, mesh_width - 1)
 
-            Colors.colors[i + 1] = '%06X' % randint(0, 0xFFFFFF)
+            Colors.colors[i + 1] = '%06X' % randint(0, 0x0000FF)
             embryos.append(Embryo(x, y, i + 1, Colors.colors[i + 1]))
             x_list.append(x)
             y_list.append(y)

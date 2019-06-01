@@ -26,7 +26,7 @@ class Uniform:
             while y + spacing_column < mesh_height:
                 y += spacing_column
 
-                Colors.colors[i + 1] = '%06X' % randint(0, 0xFFFFFF)
+                Colors.colors[i + 1] = '%06X' % randint(0, 0x0000FF)
                 embryos.append(Embryo(x, y, i + 1, Colors.colors[i + 1]))
                 i += 1
         drawing.update_step(embryos)
