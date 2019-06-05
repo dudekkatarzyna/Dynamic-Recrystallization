@@ -137,10 +137,10 @@ class NewClass(FloatLayout):
         btn2.bind(on_press=lambda x: self.save_border_condition(state=True))
         self.add_widget(btn2)
 
-        resetButton = Button(text='RESET', size_hint_x=None, size_hint=(.15, .09),
+        self.resetButton = Button(text='RESET', size_hint_x=None, size_hint=(.15, .09),
                              pos_hint={'x': 0.02, 'y': 0.1})
-        resetButton.bind(on_press=lambda x: self.reset())
-        self.add_widget(resetButton)
+        self.resetButton.bind(on_press=lambda x: self.reset())
+        self.add_widget(self.resetButton)
 
         self.animation = Button(text='START', size_hint=(.15, .09),
                                 background_color=(1, 0, 0, 1), pos_hint={'x': 0.18, 'y': .1})
@@ -378,23 +378,74 @@ class NewClass(FloatLayout):
 
         if self.animation is not None:
             self.remove_widget(self.animation)
+            self.remove_widget(self.resetButton)
 
             self.wygladzanie = ToggleButton(text='Wygładzanie ziaren', size_hint=(.15, .09),
-                                      background_color=(0, 1, 0, 1), pos_hint={'x': 0.18, 'y': .1})
+                                      background_color=(0, 1, 0, 1), pos_hint={'x': 0.02, 'y': .1})
             self.wygladzanie.bind(on_press=self.wygladzanie_ziaren)
             self.add_widget(self.wygladzanie)
 
             self.animation = ToggleButton(text='Gęstość dyslokacji', size_hint=(.15, .09),
-                                    background_color=(0, 1, 0, 1), pos_hint={'x': 0.35, 'y': .1})
+                                    background_color=(0, 1, 0, 1), pos_hint={'x': 0.18, 'y': .1})
             self.animation.bind(on_press=self.dyslokacje)
             self.add_widget(self.animation)
 
     def dyslokacje(self, *args):
-        dyslocation.algorithm(self.drawing.surface, self.mesh_width, self.mesh_height)
 
-        print("back in main")
+        self.clear_widgets()
+
+        label = Label(text='Sasiedztwo: ', pos_hint={'x': 0.02, 'y': 1.65}, size_hint=(.15, .09))
+        self.add_widget(label)
+
+        btn1 = ToggleButton(text='z promieniem', group='neighbourhood_type', size_hint=(.15, .09),
+                            pos_hint={'x': 0.07, 'y': 1.55})
+        btn1.bind(on_press=lambda x: self.save_neighbourhood_type(nbr_type='radius'))
+        self.add_widget(btn1)
+
+        btn1 = ToggleButton(text='von Neumann', group='neighbourhood_type', state='down', size_hint=(.15, .09),
+                            pos_hint={'x': 0.07, 'y': 1.45})
+        btn1.bind(on_press=lambda x: self.save_neighbourhood_type(nbr_type='von Neumann'))
+        self.add_widget(btn1)
+        btn2 = ToggleButton(text='Moore', group='neighbourhood_type', size_hint=(.15, .09),
+                            pos_hint={'x': 0.07, 'y': 1.35})
+        btn2.bind(on_press=lambda x: self.save_neighbourhood_type(nbr_type='Moore'))
+        self.add_widget(btn2)
+
+        hexButton = ToggleButton(text='Heksagonalne', group='neighbourhood_type',
+                                 size_hint=(.15, .09),
+                                 pos_hint={'x': 0.07, 'y': 1.25})
+        hexButton.bind(on_press=lambda x: self.save_neighbourhood_type(nbr_type='hexagonal'))
+        self.add_widget(hexButton)
+
+        pentaButton = ToggleButton(text='Pentagonalne', group='neighbourhood_type', size_hint_x=None,
+                                   size_hint=(.15, .09),
+                                   pos_hint={'x': 0.07, 'y': 1.15})
+        pentaButton.bind(on_press=lambda x: self.save_neighbourhood_type(nbr_type='pentagonal'))
+        self.add_widget(pentaButton)
+
+        label = Label(text='Warunki brzegowe: ', pos_hint={'x': 0.03, 'y': .9}, size_hint=(.15, .09))
+        self.add_widget(label)
+
+        btn1 = ToggleButton(text='absorbujące', group='border_condition', state='down', size_hint=(.15, .09),
+                            pos_hint={'x': 0.07, 'y': .8})
+        btn1.bind(on_press=lambda x: self.save_border_condition(state=False))
+        self.add_widget(btn1)
+        btn2 = ToggleButton(text='perdiodyczne', group='border_condition', size_hint=(.15, .09),
+                            pos_hint={'x': 0.07, 'y': .7})
+        btn2.bind(on_press=lambda x: self.save_border_condition(state=True))
+        self.add_widget(btn2)
+
+        self.animation = Button(text='START', size_hint=(.15, .09),
+                                background_color=(1, 0, 0, 1), pos_hint={'x': 0.07, 'y': .5})
+        self.animation.bind(on_press=lambda x: self.start_dyslokacje())
+        self.add_widget(self.animation)
+
+
+    def start_dyslokacje(self):
+        dyslocation.algorithm(self.drawing.surface, self.mesh_width, self.mesh_height, self.neighbourhood_type, self.border_condition, self.hex_type, self.with_radius)
+
         self.drawing.draw_dislocations()
-        print("aaaaand back")
+
 
     def wygladzanie_ziaren(self, *args):
         self.clear_widgets()
@@ -467,10 +518,10 @@ class NewClass(FloatLayout):
         btn2.bind(on_press=lambda x: self.save_border_condition(state=True))
         self.add_widget(btn2)
 
-        resetButton = Button(text='GO BACK', size_hint_x=None, size_hint=(.15, .09),
+        self.resetButton = Button(text='GO BACK', size_hint_x=None, size_hint=(.15, .09),
                              pos_hint={'x': 0.02, 'y': 0.1})
-        resetButton.bind(on_press=lambda x: self.go_back())
-        self.add_widget(resetButton)
+        self.resetButton.bind(on_press=lambda x: self.go_back())
+        self.add_widget(self.resetButton)
 
         self.animation = Button(text='START', size_hint=(.15, .09),
                                 background_color=(1, 0, 0, 1), pos_hint={'x': 0.18, 'y': .1})

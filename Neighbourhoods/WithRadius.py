@@ -7,6 +7,10 @@ from Utility import Colors
 class WithRadius:
 
     @staticmethod
+    def przejscie_krystalizacja_withRadius():
+        pass
+
+    @staticmethod
     def calculate_energy_withRadius(surface, embryo, mesh_width, mesh_height, radius, periodic):
 
         different_ids = 0

@@ -9,6 +9,61 @@ from Utility import Colors
 class Pentagonal:
 
     @staticmethod
+    def przejscie_krystalizacja_pentagonal(surface, mesh_height, mesh_width, border_condition, time):
+        for i in range(mesh_height):
+            for j in range(mesh_width):
+
+                if surface[i][j].crystalised:
+                    continue
+
+                nbr = False
+                lower = False
+
+                pent_type = random.choice(['left', 'right', 'up', 'down'])
+
+                for k in [-1, 0, 1]:
+                    for l in [-1, 0, 1]:
+                        if i == 0 and j == 0:
+                            continue
+
+                        if pent_type == 'left':
+                            if (i == -1 and j == 1) or (i == 0 and j == 1) or (i == 1 and j == 1):
+                                continue
+                        elif pent_type == 'right':
+                            if (i == -1 and j == -1) or (i == 0 and j == -1) or (i == 1 and j == -1):
+                                continue
+                        elif pent_type == 'up':
+                            if (i == 1 and j == -1) or (i == 1 and j == 0) or (i == 1 and j == 1):
+                                continue
+                        elif pent_type == 'down':
+                            if (i == -1 and j == -1) or (i == -1 and j == 0) or (i == -1 and j == 1):
+                                continue
+
+                        if k + i >= mesh_height or k + i < 0 or l + j >= mesh_width or l + j < 0:
+                            if not border_condition:
+                                continue
+
+                        if surface[(i + k) % mesh_height][(j + l) % mesh_width].crystalised and \
+                                surface[(i + k) % mesh_height][
+                                    (j + l) % mesh_width].crystalised_in_step == time - 0.001:
+                            nbr = True
+                            color = surface[(i + k) % mesh_height][(j + l) % mesh_width].color
+
+                        if surface[(i + k) % mesh_height][(j + l) % mesh_width].dislocation.real < surface[i][
+                            j].dislocation.real:
+                            lower = True
+                        else:
+                            lower = False
+
+                if nbr and lower:
+                    surface[i][j].crystalised = True
+                    surface[i][j].dislocation = 0
+                    surface[i][j].color = color
+
+
+        pass
+
+    @staticmethod
     def calculate_energy_pentagonal(surface, embryo, mesh_width, mesh_height, periodic):
 
         x = embryo.x

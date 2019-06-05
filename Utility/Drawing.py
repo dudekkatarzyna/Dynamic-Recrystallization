@@ -62,7 +62,7 @@ class Drawing:
         for i in range(self.mesh_height):
             for j in range(self.mesh_width):
                 if self.surface[i][j].energy != 0:
-                    print(self.surface[i][j].energy)
+                    # print(self.surface[i][j].energy)
                     if self.surface[i][j].energy <= 1:
                         self.draw_point(self.surface[i][j].x, self.surface[i][j].y, "1C1C18")
                     elif self.surface[i][j].energy <= 2:
@@ -117,7 +117,7 @@ class Drawing:
         for i in range(self.mesh_height):
             for j in range(self.mesh_width):
                 if self.surface[i][j].crystalised:
-                    print("crystalized")
+                    # print("crystalized")
                     count+=1
                     self.draw_point(i, j, self.surface[i][j].color)
         print("ilosc",count)

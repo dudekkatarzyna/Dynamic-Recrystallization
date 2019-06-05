@@ -9,6 +9,43 @@ from Utility import Colors
 class Moore:
 
     @staticmethod
+    def przejscie_krystalizacja_Moore(surface, mesh_height, mesh_width, border_condition, time):
+        for i in range(mesh_height):
+            for j in range(mesh_width):
+
+                if surface[i][j].crystalised:
+                    continue
+
+                nbr = False
+                lower = False
+
+                for k in [-1, 0, 1]:
+                    for l in [-1, 0, 1]:
+                        if k == 0 and l==0:
+                            continue
+
+                        if not border_condition:
+                            if 0 > i + k >= mesh_height or 0 > j + i >= mesh_width:
+                                continue
+
+                        if surface[(i + k) % mesh_height][(j + l) % mesh_width].crystalised and \
+                                surface[(i + k) % mesh_height][
+                                    (j + l) % mesh_width].crystalised_in_step == time - 0.001:
+                            nbr = True
+                            color = surface[(i + k) % mesh_height][(j + l) % mesh_width].color
+
+                        if surface[(i + k) % mesh_height][(j + l) % mesh_width].dislocation.real < surface[i][
+                            j].dislocation.real:
+                            lower = True
+                        else:
+                            lower = False
+
+                if nbr and lower:
+                    surface[i][j].crystalised = True
+                    surface[i][j].dislocation = 0
+                    surface[i][j].color = color
+
+    @staticmethod
     def calculate_energy_Moore(surface, embryo, mesh_width, mesh_height, periodic):
 
         x = embryo.x
