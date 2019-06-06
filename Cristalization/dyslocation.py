@@ -43,12 +43,11 @@ def distribute_dislocations(surface, delta_ro, mesh_width, mesh_height, time):
 
 
 def distribute_rest_of_disloations(surface, ro_to_distribute, mesh_width, mesh_height, time):
-    # print("another")
     while ro_to_distribute >= 0.01:
-        czesc = (randint(1, 9)) / 10
+        part = (randint(1, 9)) / 10
 
-        losowa_paczka = czesc * ro_to_distribute
-        ro_to_distribute -= losowa_paczka
+        random_package = part * ro_to_distribute
+        ro_to_distribute -= random_package
 
         i = randint(0, mesh_height - 1)
         j = randint(0, mesh_width - 1)
@@ -58,10 +57,10 @@ def distribute_rest_of_disloations(surface, ro_to_distribute, mesh_width, mesh_h
 
         if surface[i][j].energy != 0:
             if choices([True, False], [0.8, 0.2]):
-                surface[i][j].dislocation += losowa_paczka
+                surface[i][j].dislocation += random_package
         else:
             if choices([True, False], [0.2, 0.8]):
-                surface[i][j].dislocation += losowa_paczka
+                surface[i][j].dislocation += random_package
 
         check_crystalisation(surface[i][j], mesh_height, mesh_width, time)
 

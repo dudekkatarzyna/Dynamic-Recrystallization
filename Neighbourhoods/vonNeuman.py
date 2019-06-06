@@ -45,6 +45,7 @@ class vonNeuman:
                     surface[i][j].crystalised = True
                     surface[i][j].dislocation = 0
                     surface[i][j].color = color
+                    surface[i][j].crystalised_in_step=time
 
         pass
 
